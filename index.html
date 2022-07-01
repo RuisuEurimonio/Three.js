@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Primero </title>
+    <style>
+        body{
+            margin:0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <script src="./js/three.js"></script>
+
+    <script>
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0x000000);
+
+        const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight);
+
+        const renderer = new THREE.WebGLRenderer({alpha: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+        var geometry = new THREE.BoxGeometry(1,1,1);
+        var material = new THREE.MeshBasicMaterial({
+            color: 0xff0000,
+            wireframe: true
+        })
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        camera.position.z = 3;
+
+        function animate(){
+            requestAnimationFrame( animate);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener("keydown",(event)=>{
+            switch(event.keyCode){
+                case 87: 
+                    //w
+                    cube.rotation.x -= 0.05;
+                    break;
+                case 65:
+                    //a
+                    cube.rotation.y -= 0.05;
+                    break;
+                case 83:
+                    //s
+                    cube.rotation.x += 0.05;
+                    break;
+                case 68:
+                    //d
+                    cube.rotation.y += 0.05;
+                    break;
+            }
+        });
+
+    </script>
+
+</body>
+</html>
