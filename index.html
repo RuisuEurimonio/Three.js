@@ -13,10 +13,11 @@
     </style>
 </head>
 <body>
-    
-    <script src="./js/three.js"></script>
 
-    <script>
+    <script type="module">
+
+        import * as THREE from "./js/three.js";
+        import {OrbitControls} from "./js/orbitControls.js";
 
         //Escena
         const scene = new THREE.Scene();
@@ -29,12 +30,12 @@
         // })
 
         //Camara.
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
 
         //Camara secundaria.
-        const newCamera = new THREE.OrthographicCamera(5,-5,5,-5, 3, 10);
-        const helper = new THREE.CameraHelper(newCamera);
-        scene.add(helper);
+        // const newCamera = new THREE.OrthographicCamera(5,-5,5,-5, 3, 10);
+        // const helper = new THREE.CameraHelper(newCamera);
+        // scene.add(helper);
 
         //Renderizador.
         const renderer = new THREE.WebGLRenderer({alpha: true});
@@ -51,27 +52,52 @@
         })
         var cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
-        cube.position.z = -5;
+        // cube.position.z = -5;
 
         //Ubicamos la cámara más lejos de la figura Default=0
-        // camera.position.z = 5;
+        camera.position.z = 3;
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.minDistance = 1;
+        controls.maxDistance = 10;
+
+        // controls.enableZoom = false; //Desactiva el zoom
+        // controls.enableRotate = false; //Desactiva la rotación
+
+        // controls.enableDamping = true;
+        // controls.dampingFactor= .1;
+
+        // controls.maxPolarAngle = Math.PI; //limite de rotación
+
+        controls.screenSpacePanning = true; //Permite el desplazamiento en todos los sentidos planos
+
+        //Evento para escuchar cuando la pantalla cambie de tamaño
+        window.addEventListener("resize", redimensionar);
+
+        //Funcion que actualiza los valores que involucren el tamaño de pantalla.
+        function redimensionar(){
+            camera.aspect = (window.innerWidth / window.innerHeight);
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.render(scene, camera);
+        }
 
         //Variable para calcular coseno y seno.
-        var i = 0;
+        // var i = 0;
 
         //Creamos la función para pintar en pantalla y agregar movimiento.
         function animate(){
             requestAnimationFrame( animate);
 
             //Código para rotar la figura, x los lados y z la posición de la camara, en base a la variable i
-            camera.lookAt(newCamera.position);
-            camera.position.x = Math.cos(i) * 30;
-            camera.position.z = Math.sin(i) * 30; 
+            // camera.lookAt(newCamera.position);
+            // camera.position.x = Math.cos(i) * 30;
+            // camera.position.z = Math.sin(i) * 30; 
 
-            i+=0.01;
+            // i+=0.01;
 
-            // cube.rotation.x += 0.01;
-            // cube.rotation.y += 0.01;
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
             renderer.render(scene, camera);
         }
 
